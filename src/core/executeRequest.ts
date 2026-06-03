@@ -46,12 +46,7 @@ export async function executeRequest(config: RequestConfig): Promise<RequestResu
     };
   } catch (error: unknown) {
     return {
-      error:
-        typeof error === "string"
-          ? error
-          : error instanceof Error
-            ? error.message
-            : "Network error",
+      error: typeof error === "string" ? error: error instanceof Error ? error.message : "Network error",
       time: Date.now() - start,
     };
   }
