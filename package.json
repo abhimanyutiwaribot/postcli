@@ -16,6 +16,7 @@
     "postcli": "./dist/index.js"
   },
   "dependencies": {
+    "clipboardy": "^5.3.1",
     "ink": "^7.0.5",
     "ink-select-input": "^6.2.0",
     "react": "^19.2.7"
