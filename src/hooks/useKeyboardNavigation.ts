@@ -1,11 +1,12 @@
 import { useInput } from "ink";
-import { isEditing, LEFT_SECTIONS, VIEWPORT_HEIGHT } from "../constants/constants.js";
+import { LEFT_SECTIONS, VIEWPORT_HEIGHT } from "../constants/constants.js";
 import { makeField, tfDelete, tfInsert, tfLeft, tfRight } from "../utils/textField.js";
 import { useUiState } from "./useUiState.js";
 import { commitDraft, copyResponse, cycleMethod, deleteRow, sendRequest } from "../utils/request.js";
-import { totalLines } from "../utils/response.js";
+// import { totalLines } from "../utils/response.js";
 import { useResponseState } from "./useResponseState.js";
 import { useRequestState } from "./useRequestState.js";
+import { useResponseAction } from "./useResponseAction.js";
 
 
 
@@ -14,6 +15,8 @@ export function useKeyboardNavigation({onBack}: { onBack: () => void }){
   const uiState = useUiState()
   const responseState = useResponseState()
   const requestState = useRequestState()
+  const { totalLines } = useResponseAction()
+  const isEditing = uiState.editMode !== "none";
   
   useInput((input, key) => {
 
