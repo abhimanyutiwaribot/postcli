@@ -2,12 +2,15 @@ import { Box, Text } from "ink";
 import RequestPanel from "../components/RequestPanel.js";
 import ResponsePanel from "../components/ResponsePanel.js";
 import KeyBindings from "../components/KeyBindings.js";
+import { useKeyboardNavigation } from "../hooks/useKeyboardNavigation.js";
 
 interface RequestScreenProps {
   onBack: () => void;
 }
 
 export default function RequestScreen({ onBack }: RequestScreenProps) {
+
+  useKeyboardNavigation({onBack})
 
   return (
     <Box flexDirection="column">
