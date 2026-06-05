@@ -2,11 +2,13 @@ import { Box, Text } from "ink";
 import { RIGHT_DIVIDER, VIEWPORT_HEIGHT } from "../constants/constants.js";
 import { useResponseState } from "../hooks/useResponseState.js";
 import { useUiState } from "../hooks/useUiState.js";
-import { byteSize, paddedLines, statusColor, totalLines } from "../utils/response.js";
+import { byteSize, statusColor } from "../utils/response.js";
+import { useResponseAction } from "../hooks/useResponseAction.js";
 
 export default function ResponsePanel(){
   const responseState = useResponseState()
   const uiState = useUiState()
+  const { paddedLines, totalLines} = useResponseAction()
 
   const rightActive = uiState.panel === "right";
 
