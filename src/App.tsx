@@ -135,11 +135,6 @@ export default function App() {
     state.scrollOffset + state.VIEWPORT_HEIGHT
   );
 
-  const paddedConsoleLines = [
-    ...visibleLines,
-    ...Array(Math.max(0, state.VIEWPORT_HEIGHT - visibleLines.length)).fill("")
-  ];
-
   return (
     <Box flexDirection="column" padding={1}>
       {/* Header */}
@@ -164,15 +159,15 @@ export default function App() {
       {/* Output Console Log */}
       <Box 
         flexDirection="column" 
-        height={state.VIEWPORT_HEIGHT} 
+        maxHeight={state.VIEWPORT_HEIGHT} 
         overflow="hidden" 
         paddingX={1} 
         marginBottom={1}
       >
-        {paddedConsoleLines.map((line, i) => (
+        {visibleLines.map((line, i) => (
           <Box key={i}>
             {/* Run highlighting only if it looks like JSON structure */}
-            {line && /^\s*([{\}[\]"]|true|false|null|-?\d)/.test(line) ? (
+            {/^\s*([{\}[\]"]|true|false|null|-?\d)/.test(line) ? (
               highlightJsonLine(line)
             ) : (
               <Text color={line.startsWith("postcli ❯") ? "cyan" : line.startsWith("❯") ? "yellow" : "white"}>
