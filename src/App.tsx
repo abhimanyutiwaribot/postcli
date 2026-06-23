@@ -11,7 +11,7 @@ export default function App() {
   // Wire up REPL keyboard event loop
   useKeyboardNavigation({ state });
 
-  const INSPECTOR_HEIGHT = 18;
+  const INSPECTOR_HEIGHT = 25;
 
   // ── RENDER MODE: RESPONSE INSPECTOR ──
   if (state.viewingResponse) {
@@ -39,40 +39,69 @@ export default function App() {
           <Text bold color="magenta">❯ Response Details</Text>
           <Text dimColor>—</Text>
           <Text color="gray">
-            Status: <Text color="green" bold>{state.lastResponseStatus}</Text>  •  
+            Status: <Text color={state.lastResponseStatus.includes("Error") || state.lastResponseStatus.includes("failed") ? "red" : "green"} bold>{state.lastResponseStatus}</Text>  •  
             Time: <Text color="white">{state.lastResponseTime}ms</Text>  •  
             Size: <Text color="white">{state.lastResponseSize}</Text>
           </Text>
         </Box>
 
-        {/* Tab Buttons */}
-        <Box paddingX={1} gap={3} marginBottom={1} marginTop={1}>
-          <Text bold color={isBodyTab ? "cyan" : "gray"}>
-            {isBodyTab ? "● [Body]" : "  [Body]"}
-          </Text>
-          <Text bold color={!isBodyTab ? "cyan" : "gray"}>
-            {!isBodyTab ? "● [Headers]" : "  [Headers]"}
-          </Text>
-          <Text dimColor>(Tab or h/l to switch)</Text>
-        </Box>
-
-        {/* Inspector Viewport */}
-        <Box 
-          flexDirection="column" 
-          height={INSPECTOR_HEIGHT} 
-          overflow="hidden" 
-          paddingX={1} 
-          marginBottom={1}
-        >
-          {paddedInspectorLines.map((line, i) => (
-            <Box key={i}>
-              {isBodyTab ? (
-                highlightJsonLine(line)
-              ) : (
-                <Text color="white">{line}</Text>
-              )}
+        {/* Side-by-side Layout: Viewport (Left) + Mascot Sidebar (Right) */}
+        <Box flexDirection="row" marginTop={1}>
+          {/* Left Column: Tab Buttons + Viewport */}
+          <Box flexDirection="column" flexGrow={1}>
+            {/* Tab Buttons */}
+            <Box paddingX={1} gap={3} marginBottom={1}>
+              <Text bold color={isBodyTab ? "cyan" : "gray"}>
+                {isBodyTab ? "● Body" : "  Body"}
+              </Text>
+              <Text bold color={!isBodyTab ? "cyan" : "gray"}>
+                {!isBodyTab ? "● Headers" : "  Headers"}
+              </Text>
+              <Text dimColor>(Tab to switch)</Text>
             </Box>
-          ))}
+
+            {/* Viewport Box */}
+            <Box 
+              flexDirection="column" 
+              height={INSPECTOR_HEIGHT} 
+              overflow="hidden" 
+              paddingX={1} 
+              marginBottom={1}
+            >
+              {paddedInspectorLines.map((line, i) => (
+                <Box key={i}>
+                  {isBodyTab ? (
+                    highlightJsonLine(line)
+                  ) : (
+                    <Text color="white">{line}</Text>
+                  )}
+                </Box>
+              ))}
+            </Box>
+          </Box>
+
+          {/* Right Column: Mascot Companion Sidebar */}
+          <Box 
+            flexDirection="column" 
+            width={22} 
+            paddingLeft={2} 
+            flexShrink={0}
+            justifyContent="center"
+          >
+            {state.lastResponseStatus.includes("Error") || state.lastResponseStatus.includes("failed") ? (
+              <Box flexDirection="column">
+                {(FAILURE_FRAMES[state.inspectorFrame] || []).map((line, idx) => (
+                  <Text key={idx} color="red">{line}</Text>
+                ))}
+              </Box>
+            ) : (
+              <Box flexDirection="column">
+                {(VICTORY_FRAMES[state.inspectorFrame] || []).map((line, idx) => (
+                  <Text key={idx} color="green">{line}</Text>
+                ))}
+              </Box>
+            )}
+          </Box>
         </Box>
 
         {/* Scroll coordinates & copy confirmation */}
@@ -151,29 +180,9 @@ export default function App() {
 
       {/* Mascot loading animations */}
       {state.loading && (
-        <Box height={10} paddingX={1} flexDirection="column" justifyContent="center" marginBottom={1}>
-          {state.activeAnimation === "success" && (
-            <Box flexDirection="column">
-              {(VICTORY_FRAMES[state.animationFrame] || []).map((line, idx) => (
-                <Text key={idx} color="green">{line}</Text>
-              ))}
-            </Box>
-          )}
-
-          {state.activeAnimation === "failure" && (
-            <Box flexDirection="column">
-              {(FAILURE_FRAMES[state.animationFrame] || []).map((line, idx) => (
-                <Text key={idx} color="red">{line}</Text>
-              ))}
-            </Box>
-          )}
-
-          {!state.activeAnimation && (
-            <Box gap={1}>
-              <Text color="yellow">{SPINNER_FRAMES[state.spinnerFrame]}</Text>
-              <Text color="yellow">Executing remote HTTP call...</Text>
-            </Box>
-          )}
+        <Box gap={1} paddingX={1} marginBottom={1}>
+          <Text color="yellow">{SPINNER_FRAMES[state.spinnerFrame]}</Text>
+          <Text color="yellow">Executing remote HTTP call...</Text>
         </Box>
       )}
 

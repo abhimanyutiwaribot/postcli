@@ -34,12 +34,11 @@ export function usePostCli() {
   const [lastResponseStatus, setLastResponseStatus] = useState("");
   const [lastResponseTime, setLastResponseTime] = useState(0);
   const [lastResponseSize, setLastResponseSize] = useState("");
+  const [inspectorFrame, setInspectorFrame] = useState(0);
 
-  // --- Request Loading & Animation ---
+  // --- Request Loading State ---
   const [loading, setLoading] = useState(false);
   const [spinnerFrame, setSpinnerFrame] = useState(0);
-  const [activeAnimation, setActiveAnimation] = useState<"success" | "failure" | null>(null);
-  const [animationFrame, setAnimationFrame] = useState(0);
 
   // --- Auto-calculated Scroll Window ---
   const VIEWPORT_HEIGHT = 16;
@@ -55,13 +54,24 @@ export function usePostCli() {
   // Loading spinner ticker
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (loading && !activeAnimation) {
+    if (loading) {
       interval = setInterval(() => {
         setSpinnerFrame((f) => (f + 1) % SPINNER_FRAMES.length);
       }, 80);
     }
     return () => clearInterval(interval);
-  }, [loading, activeAnimation]);
+  }, [loading]);
+
+  // Inspector Mascot frame ticker loop
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (viewingResponse && !loading) {
+      interval = setInterval(() => {
+        setInspectorFrame((f) => (f + 1) % 3);
+      }, 350);
+    }
+    return () => clearInterval(interval);
+  }, [viewingResponse, loading]);
 
   // --- Autocomplete Generator ---
   const getSuggestion = (val: string): string => {
@@ -88,23 +98,6 @@ export function usePostCli() {
   };
 
   const suggestion = getSuggestion(inputValue.value);
-
-  // --- Animations Ticker ---
-  const playAnimation = (success: boolean, onFinish: () => void) => {
-    setActiveAnimation(success ? "success" : "failure");
-    setAnimationFrame(0);
-    let frame = 0;
-    const interval = setInterval(() => {
-      frame++;
-      if (frame >= 3) {
-        clearInterval(interval);
-        setActiveAnimation(null);
-        onFinish();
-      } else {
-        setAnimationFrame(frame);
-      }
-    }, 250);
-  };
 
   // --- Executing Commands ---
   const submitCommand = async (commandStr: string) => {
@@ -201,62 +194,57 @@ export function usePostCli() {
       ...(parsed.body ? { body: parsed.body } : {})
     });
 
-    const isSuccess = !("error" in result) && result.status < 400;
+    setLoading(false);
 
-    // Play victory or failure mascot animation
-    playAnimation(isSuccess, () => {
-      setLoading(false);
+    if ("error" in result) {
+      setConsoleLines((prev) => {
+        const copy = [...prev];
+        copy.splice(logIndex, 1);
+        return [
+          ...copy,
+          `✖  ${parsed.method} ${parsed.url} failed: ${result.error} (${result.time}ms)`,
+          ""
+        ];
+      });
+
+      // Set failed details for inspector
+      setLastResponseBody(`Error: ${result.error}`);
+      setLastResponseHeaders({});
+      setLastResponseStatus("Error");
+      setLastResponseTime(result.time);
+      setLastResponseSize("—");
       
-      if ("error" in result) {
-        setConsoleLines((prev) => {
-          const copy = [...prev];
-          copy.splice(logIndex, 1);
-          return [
-            ...copy,
-            `✖  ${parsed.method} ${parsed.url} failed: ${result.error} (${result.time}ms)`,
-            ""
-          ];
-        });
+      // Open inspector to show failure
+      setViewingResponse(true);
+      setInspectorTab("body");
+      setInspectorScroll(0);
+    } else {
+      const pretty = prettyBody(result.body);
+      const sizeStr = byteSize(result.body);
+      const statusText = `${result.status} ${result.status < 400 ? "OK" : "Error"}`;
+      
+      setConsoleLines((prev) => {
+        const copy = [...prev];
+        copy.splice(logIndex, 1);
+        return [
+          ...copy,
+          `✔  ${result.status} ${result.status < 400 ? "OK" : "Error"}  •  ${result.time}ms  •  ${sizeStr}  (Press v to view details)`,
+          ""
+        ];
+      });
 
-        // Set failed details for inspector
-        setLastResponseBody(`Error: ${result.error}`);
-        setLastResponseHeaders({});
-        setLastResponseStatus("Error");
-        setLastResponseTime(result.time);
-        setLastResponseSize("—");
-        
-        // Open inspector to show failure
-        setViewingResponse(true);
-        setInspectorTab("body");
-        setInspectorScroll(0);
-      } else {
-        const pretty = prettyBody(result.body);
-        const sizeStr = byteSize(result.body);
-        const statusText = `${result.status} ${result.status < 400 ? "OK" : "Error"}`;
-        
-        setConsoleLines((prev) => {
-          const copy = [...prev];
-          copy.splice(logIndex, 1);
-          return [
-            ...copy,
-            `✔  ${result.status} ${result.status < 400 ? "OK" : "Error"}  •  ${result.time}ms  •  ${sizeStr}  (Press v to view details)`,
-            ""
-          ];
-        });
-
-        // Save response details
-        setLastResponseBody(pretty);
-        setLastResponseHeaders(result.headers);
-        setLastResponseStatus(statusText);
-        setLastResponseTime(result.time);
-        setLastResponseSize(sizeStr);
-        
-        // Auto-open response inspector!
-        setViewingResponse(true);
-        setInspectorTab("body");
-        setInspectorScroll(0);
-      }
-    });
+      // Save response details
+      setLastResponseBody(pretty);
+      setLastResponseHeaders(result.headers);
+      setLastResponseStatus(statusText);
+      setLastResponseTime(result.time);
+      setLastResponseSize(sizeStr);
+      
+      // Auto-open response inspector!
+      setViewingResponse(true);
+      setInspectorTab("body");
+      setInspectorScroll(0);
+    }
   };
 
   const copyResponseDirectly = async () => {
@@ -286,8 +274,6 @@ export function usePostCli() {
     lastResponseBody,
     loading,
     spinnerFrame,
-    activeAnimation,
-    animationFrame,
     suggestion,
     totalLines,
     VIEWPORT_HEIGHT,
@@ -304,7 +290,8 @@ export function usePostCli() {
     lastResponseHeaders,
     lastResponseStatus,
     lastResponseTime,
-    lastResponseSize
+    lastResponseSize,
+    inspectorFrame
   };
 }
 export type PostCliState = ReturnType<typeof usePostCli>;
