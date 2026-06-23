@@ -1,4 +1,3 @@
-import { useUiState } from "../hooks/useUiState.js";
 import type { Method } from "../types/request.js";
 import type { LeftSection } from "../types/ui.js";
 

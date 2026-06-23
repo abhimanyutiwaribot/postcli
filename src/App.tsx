@@ -1,36 +1,28 @@
-import React, { useState } from "react";
-import { Box } from "ink";
-import HomeScreen from "./screens/HomeScreen.js";
-import RequestScreen from "./screens/RequestScreen.js";
-import CollectionsScreen from "./screens/CollectionsScreen.js";
-import HistoryScreen from "./screens/HistoryScreen.js";
-import SettingsScreen from "./screens/SettingsScreen.js";
-
-type Screen = "home" | "request" | "collections" | "history" | "settings";
+import React from "react";
+import { Box, Text } from "ink";
+import RequestPanel from "./components/RequestPanel.js";
+import ResponsePanel from "./components/ResponsePanel.js";
+import KeyBindings from "./components/KeyBindings.js";
+import { usePostCli } from "./hooks/usePostCli.js";
+import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation.js";
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>("home");
+  const state = usePostCli();
 
-  const renderScreen = () => {
-    switch (currentScreen) {
-      case "home":
-        return <HomeScreen onNavigate={setCurrentScreen} />;
-      case "request":
-        return <RequestScreen onBack={() => setCurrentScreen("home")} />;
-      case "collections":
-        return <CollectionsScreen onBack={() => setCurrentScreen("home")} />;
-      case "history":
-        return <HistoryScreen onBack={() => setCurrentScreen("home")} />;
-      case "settings":
-        return <SettingsScreen onBack={() => setCurrentScreen("home")} />;
-      default:
-        return <HomeScreen onNavigate={setCurrentScreen} />;
-    }
-  };
+  // Bind keyboard navigation
+  useKeyboardNavigation({ state });
 
   return (
     <Box flexDirection="column">
-      {renderScreen()}
+      <Box paddingX={1} paddingBottom={0}>
+        <Text bold color="cyan">PostCLI </Text>
+        <Text>HTTP Request Builder</Text>
+      </Box>
+      <Box borderStyle="single" borderColor="gray" flexDirection="row">
+        <RequestPanel state={state} />
+        <ResponsePanel state={state} />
+      </Box>
+      <KeyBindings />
     </Box>
   );
 }

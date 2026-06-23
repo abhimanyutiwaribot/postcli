@@ -2,17 +2,16 @@ import { Box, Text } from "ink";
 import SectionHeader from "./SectionHeader.js";
 import { DIVIDER } from "../constants/constants.js";
 import TextInput from "./TextInput.js";
-import type { useRequestState } from "../hooks/useRequestState.js";
-import type { useUiState } from "../hooks/useUiState.js";
-import type { useRequestAction } from "../hooks/useRequestAction.js";
+import type { usePostCli } from "../hooks/usePostCli.js";
 
 interface RequestPanelProps {
-  requestState: ReturnType<typeof useRequestState>;
-  uiState: ReturnType<typeof useUiState>;
-  requestActions: ReturnType<typeof useRequestAction>;
+  state: ReturnType<typeof usePostCli>;
 }
 
-export default function RequestPanel({ requestState, uiState, requestActions }: RequestPanelProps) {
+export default function RequestPanel({ state }: RequestPanelProps) {
+  const requestState = state;
+  const uiState = state;
+  const requestActions = state;
   const leftActive = uiState.panel === "left";
 
   return (

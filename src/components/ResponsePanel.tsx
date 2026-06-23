@@ -1,19 +1,16 @@
 import { Box, Text } from "ink";
 import { RIGHT_DIVIDER, VIEWPORT_HEIGHT } from "../constants/constants.js";
 import { byteSize, statusColor } from "../utils/response.js";
-import type { useUiState } from "../hooks/useUiState.js";
-import type { useResponseState } from "../hooks/useResponseState.js";
-import type { useResponseAction } from "../hooks/useResponseAction.js";
+import type { usePostCli } from "../hooks/usePostCli.js";
 
 interface ResponsePanelProps {
-  uiState: ReturnType<typeof useUiState>;
-  responseState: ReturnType<typeof useResponseState>;
-  responseActions: ReturnType<typeof useResponseAction>;
+  state: ReturnType<typeof usePostCli>;
 }
 
-export default function ResponsePanel({ uiState, responseState, responseActions}: ResponsePanelProps){
-
-
+export default function ResponsePanel({ state }: ResponsePanelProps) {
+  const uiState = state;
+  const responseState = state;
+  const responseActions = state;
   const rightActive = uiState.panel === "right";
 
   return (

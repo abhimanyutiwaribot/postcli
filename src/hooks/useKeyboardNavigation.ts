@@ -1,170 +1,192 @@
 import { useInput } from "ink";
 import { LEFT_SECTIONS, VIEWPORT_HEIGHT } from "../constants/constants.js";
 import { makeField, tfDelete, tfInsert, tfLeft, tfRight } from "../utils/textField.js";
-import type { useResponseAction } from "./useResponseAction.js";
-import type { useRequestAction } from "./useRequestAction.js";
-import type { useRequestState } from "./useRequestState.js";
-import type { useResponseState } from "./useResponseState.js";
-import type { useUiState } from "./useUiState.js";
+import type { usePostCli } from "./usePostCli.js";
 
 interface KeyboardNavigationProps {
-  onBack: () => void;
-  requestState: ReturnType<typeof useRequestState>;
-  responseState: ReturnType<typeof useResponseState>;
-  uiState: ReturnType<typeof useUiState>;
-  responseActions: ReturnType<typeof useResponseAction>;
-  requestActions: ReturnType<typeof useRequestAction>
+  state: ReturnType<typeof usePostCli>;
 }
 
-export function useKeyboardNavigation({ onBack, requestState, responseState, uiState, responseActions, requestActions}: KeyboardNavigationProps){
+export function useKeyboardNavigation({ state }: KeyboardNavigationProps) {
+  const { totalLines } = state;
+  const isEditing = state.editMode !== "none";
 
-  const { totalLines } = responseActions
-  const { commitDraft, copyResponse, cycleMethod, deleteRow, sendRequest } = requestActions
-  const isEditing = uiState.editMode !== "none";
-  
   useInput((input, key) => {
-
+    // ── Editing Mode Controls ──
     if (isEditing) {
       if (key.escape) {
-        uiState.setDraftKey(makeField()); uiState.setDraftValue(makeField()); uiState.setEditMode("none");
+        state.setDraftKey(makeField());
+        state.setDraftValue(makeField());
+        state.setEditMode("none");
         return;
       }
       if (key.return) {
-        if (uiState.editMode === "url" || uiState.editMode === "body") { uiState.setEditMode("none"); return; }
-        if (uiState.editMode === "kv-key")   { uiState.setEditMode("kv-value"); return; }
-        if (uiState.editMode === "kv-value") { commitDraft(uiState.leftSec === "params" ? "params" : "req-headers"); return; }
+        if (state.editMode === "url" || state.editMode === "body") {
+          state.setEditMode("none");
+          return;
+        }
+        if (state.editMode === "kv-key") {
+          state.setEditMode("kv-value");
+          return;
+        }
+        if (state.editMode === "kv-value") {
+          state.commitDraft(state.leftSec === "params" ? "params" : "req-headers");
+          return;
+        }
         return;
       }
       if (key.leftArrow) {
-        if (uiState.editMode === "url")           requestState.setUrlField(tfLeft(requestState.urlField));
-        else if (uiState.editMode === "body")     requestState.setBodyField(tfLeft(requestState.bodyField));
-        else if (uiState.editMode === "kv-key")   uiState.setDraftKey(tfLeft(uiState.draftKey));
-        else if (uiState.editMode === "kv-value") uiState.setDraftValue(tfLeft(uiState.draftValue));
+        if (state.editMode === "url")           state.setUrlField(tfLeft(state.urlField));
+        else if (state.editMode === "body")     state.setBodyField(tfLeft(state.bodyField));
+        else if (state.editMode === "kv-key")   state.setDraftKey(tfLeft(state.draftKey));
+        else if (state.editMode === "kv-value") state.setDraftValue(tfLeft(state.draftValue));
         return;
       }
       if (key.rightArrow) {
-        if (uiState.editMode === "url")           requestState.setUrlField(tfRight(requestState.urlField));
-        else if (uiState.editMode === "body")     requestState.setBodyField(tfRight(requestState.bodyField));
-        else if (uiState.editMode === "kv-key")   uiState.setDraftKey(tfRight(uiState.draftKey));
-        else if (uiState.editMode === "kv-value") uiState.setDraftValue(tfRight(uiState.draftValue));
+        if (state.editMode === "url")           state.setUrlField(tfRight(state.urlField));
+        else if (state.editMode === "body")     state.setBodyField(tfRight(state.bodyField));
+        else if (state.editMode === "kv-key")   state.setDraftKey(tfRight(state.draftKey));
+        else if (state.editMode === "kv-value") state.setDraftValue(tfRight(state.draftValue));
         return;
       }
       if (key.backspace || key.delete) {
-        if (uiState.editMode === "url")           requestState.setUrlField(tfDelete(requestState.urlField));
-        else if (uiState.editMode === "body")     requestState.setBodyField(tfDelete(requestState.bodyField));
-        else if (uiState.editMode === "kv-key")   uiState.setDraftKey(tfDelete(uiState.draftKey));
-        else if (uiState.editMode === "kv-value") uiState.setDraftValue(tfDelete(uiState.draftValue));
+        if (state.editMode === "url")           state.setUrlField(tfDelete(state.urlField));
+        else if (state.editMode === "body")     state.setBodyField(tfDelete(state.bodyField));
+        else if (state.editMode === "kv-key")   state.setDraftKey(tfDelete(state.draftKey));
+        else if (state.editMode === "kv-value") state.setDraftValue(tfDelete(state.draftValue));
         return;
       }
       if (input) {
-        if (uiState.editMode === "url")           requestState.setUrlField(tfInsert(requestState.urlField, input));
-        else if (uiState.editMode === "body")     requestState.setBodyField(tfInsert(requestState.bodyField, input));
-        else if (uiState.editMode === "kv-key")   uiState.setDraftKey(tfInsert(uiState.draftKey, input));
-        else if (uiState.editMode === "kv-value") uiState.setDraftValue(tfInsert(uiState.draftValue, input));
+        if (state.editMode === "url")           state.setUrlField(tfInsert(state.urlField, input));
+        else if (state.editMode === "body")     state.setBodyField(tfInsert(state.bodyField, input));
+        else if (state.editMode === "kv-key")   state.setDraftKey(tfInsert(state.draftKey, input));
+        else if (state.editMode === "kv-value") state.setDraftValue(tfInsert(state.draftValue, input));
       }
       return;
     }
 
-    // ── Global ──
-    if (input === "q" || input === "Q") { console.log("Q pressed"); onBack(); return; }
-    if (input === "e" || input === "E") { void sendRequest(); return; }
-    if (input === "c" || input === "C") { void copyResponse(); return; }
+    // ── Global Actions (Command Mode) ──
+    if (input === "q" || input === "Q") {
+      process.exit(0);
+    }
+    if (input === "e" || input === "E") {
+      void state.sendRequest();
+      return;
+    }
+    if (input === "c" || input === "C") {
+      void state.copyResponse();
+      return;
+    }
 
-    // ── Tab: switch panel focus ──
+    // ── Tab: Toggle focus between Panels ──
     if (key.tab) {
-      uiState.setPanel(p => p === "left" ? "right" : "left");
+      state.setPanel(p => p === "left" ? "right" : "left");
       return;
     }
 
-    // ── LEFT panel ──────────────────────────────────────────────────────────
-    if (uiState.panel === "left") {
-
-      // j / down  →  move section down (or KV row down)
+    // ── Left Panel Keyboard Handling ──
+    if (state.panel === "left") {
+      // j / down  →  Move cursor down sections or table rows
       if (input === "j" || key.downArrow) {
-        if (uiState.leftSec === "params" && uiState.kvCursor < requestState.params.length - 1) {
-          uiState.setKvCursor(c => c + 1); return;
+        if (state.leftSec === "params" && state.kvCursor < state.params.length - 1) {
+          state.setKvCursor(c => c + 1);
+          return;
         }
-        if (uiState.leftSec === "req-headers" && uiState.kvCursor < requestState.reqHeaders.length - 1) {
-          uiState.setKvCursor(c => c + 1); return;
+        if (state.leftSec === "req-headers" && state.kvCursor < state.reqHeaders.length - 1) {
+          state.setKvCursor(c => c + 1);
+          return;
         }
-        const i = LEFT_SECTIONS.indexOf(uiState.leftSec);
+        const i = LEFT_SECTIONS.indexOf(state.leftSec);
         if (i < LEFT_SECTIONS.length - 1) {
-          uiState.setLeftSec(LEFT_SECTIONS[i + 1]!);
-          uiState.setKvCursor(0);
+          state.setLeftSec(LEFT_SECTIONS[i + 1]!);
+          state.setKvCursor(0);
         }
         return;
       }
 
-      // k / up  →  move section up (or KV row up)
+      // k / up  →  Move cursor up sections or table rows
       if (input === "k" || key.upArrow) {
-        if ((uiState.leftSec === "params" || uiState.leftSec === "req-headers") && uiState.kvCursor > 0) {
-          uiState.setKvCursor(c => c - 1); return;
+        if ((state.leftSec === "params" || state.leftSec === "req-headers") && state.kvCursor > 0) {
+          state.setKvCursor(c => c - 1);
+          return;
         }
-        const i = LEFT_SECTIONS.indexOf(uiState.leftSec);
+        const i = LEFT_SECTIONS.indexOf(state.leftSec);
         if (i > 0) {
-          uiState.setLeftSec(LEFT_SECTIONS[i - 1]!);
-          uiState.setKvCursor(0);
+          state.setLeftSec(LEFT_SECTIONS[i - 1]!);
+          state.setKvCursor(0);
         }
         return;
       }
 
-      // section-specific
-      if (uiState.leftSec === "url-method") {
-        if (input === "i")           uiState.setEditMode("url");
-        if (key.leftArrow)           cycleMethod(-1);
-        if (key.rightArrow)          cycleMethod(1);
+      // Section-specific inputs
+      if (state.leftSec === "url-method") {
+        if (input === "i") state.setEditMode("url");
+        if (key.leftArrow) state.cycleMethod(-1);
+        if (key.rightArrow) state.cycleMethod(1);
       }
 
-      if (uiState.leftSec === "params") {
+      if (state.leftSec === "params") {
         if (input === "a" || input === "A") {
-          uiState.setKvCursor(requestState.params.length);
-          uiState.setDraftKey(makeField()); uiState.setDraftValue(makeField());
-          uiState.setEditMode("kv-key");
+          state.setKvCursor(state.params.length);
+          state.setDraftKey(makeField());
+          state.setDraftValue(makeField());
+          state.setEditMode("kv-key");
         }
-        if (input === "d" || input === "D") deleteRow("params");
+        if (input === "d" || input === "D") {
+          state.deleteRow("params");
+        }
       }
 
-      if (uiState.leftSec === "req-headers") {
+      if (state.leftSec === "req-headers") {
         if (input === "a" || input === "A") {
-          uiState.setKvCursor(requestState.reqHeaders.length);
-          uiState.setDraftKey(makeField()); uiState.setDraftValue(makeField());
-          uiState.setEditMode("kv-key");
+          state.setKvCursor(state.reqHeaders.length);
+          state.setDraftKey(makeField());
+          state.setDraftValue(makeField());
+          state.setEditMode("kv-key");
         }
-        if (input === "d" || input === "D") deleteRow("req-headers");
+        if (input === "d" || input === "D") {
+          state.deleteRow("req-headers");
+        }
       }
 
-      if (uiState.leftSec === "body") {
-        if (input === "i") uiState.setEditMode("body");
+      if (state.leftSec === "body") {
+        if (input === "i") state.setEditMode("body");
       }
     }
 
-    // ── RIGHT panel ─────────────────────────────────────────────────────────
-    if (uiState.panel === "right") {
+    // ── Right Panel Keyboard Handling ──
+    if (state.panel === "right") {
+      // h/l or left/right  →  Switch response tab
+      if (input === "h" || key.leftArrow) {
+        state.setRightTab("body");
+        state.setRespScroll(0);
+        return;
+      }
+      if (input === "l" || key.rightArrow) {
+        state.setRightTab("headers");
+        state.setRespScroll(0);
+        return;
+      }
 
-      // h/l or left/right  →  switch response tab
-      if (input === "h" || key.leftArrow)  { uiState.setRightTab("body");    responseState.setRespScroll(0); return; }
-      if (input === "l" || key.rightArrow) { uiState.setRightTab("headers"); responseState.setRespScroll(0); return; }
-
-      // j/k  →  scroll response viewport
+      // j/k or up/down  →  Scroll viewport
       if (input === "j" || key.downArrow) {
-        responseState.setRespScroll(s => Math.min(s + 1, Math.max(0, totalLines - VIEWPORT_HEIGHT)));
+        state.setRespScroll(s => Math.min(s + 1, Math.max(0, totalLines - VIEWPORT_HEIGHT)));
         return;
       }
       if (input === "k" || key.upArrow) {
-        responseState.setRespScroll(s => Math.max(0, s - 1));
+        state.setRespScroll(s => Math.max(0, s - 1));
         return;
       }
 
-      // G  →  jump to end, gg  →  jump to top
+      // Vim scroll helpers: G (end), gg (top)
       if (input === "G") {
-        responseState.setRespScroll(Math.max(0, totalLines - VIEWPORT_HEIGHT));
+        state.setRespScroll(Math.max(0, totalLines - VIEWPORT_HEIGHT));
         return;
       }
       if (input === "g") {
-        responseState.setRespScroll(0);
+        state.setRespScroll(0);
         return;
       }
     }
   });
 }
-
