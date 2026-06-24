@@ -27,7 +27,7 @@ export function usePostCli() {
   // --- UI & Scrolling ---
   const [panel, setPanel] = useState<"input" | "log">("input");
   const [scrollOffset, setScrollOffset] = useState(0);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
   const [lastResponseBody, setLastResponseBody] = useState("");
 
   // --- Inspector State ---
@@ -251,13 +251,22 @@ export function usePostCli() {
     }
   };
 
-  const copyResponseDirectly = async () => {
-    if (!lastResponseBody) return;
+  const copyResponseDirectly = async (type: "body" | "headers" = "body") => {
     try {
-      await clipboard.write(lastResponseBody);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-      setConsoleLines((prev) => [...prev, "✓ Copied response body!", ""]);
+      if (type === "body") {
+        if (!lastResponseBody) return;
+        await clipboard.write(lastResponseBody);
+        setCopied("body");
+        setTimeout(() => setCopied(null), 1500);
+      } else {
+        if (!lastResponseHeaders || Object.keys(lastResponseHeaders).length === 0) return;
+        const formatted = Object.entries(lastResponseHeaders)
+          .map(([k, v]) => `${k}: ${v}`)
+          .join("\n");
+        await clipboard.write(formatted);
+        setCopied("headers");
+        setTimeout(() => setCopied(null), 1500);
+      }
     } catch { /* ignore */ }
   };
 

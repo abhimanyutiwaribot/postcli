@@ -75,7 +75,7 @@ export function useKeyboardNavigation({ state: propState }: KeyboardNavigationPr
 
       // Copy response body
       if (input === "c" || input === "C") {
-        void state.copyResponseDirectly();
+        void state.copyResponseDirectly(inspectorTab);
         return;
       }
 

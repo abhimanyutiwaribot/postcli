@@ -67,7 +67,9 @@ export default function ResponseInspector({ state }: ResponseInspectorProps) {
           >
             {paddedInspectorLines.map((line, i) => (
               <Box key={i}>
-                {isBodyTab ? (
+                {!line ? (
+                  <Text>{" "}</Text>
+                ) : isBodyTab ? (
                   highlightJsonLine(line)
                 ) : (
                   <Text color="white">{line}</Text>
@@ -94,7 +96,7 @@ export default function ResponseInspector({ state }: ResponseInspectorProps) {
           ) : (
             <Box flexDirection="column">
               {(VICTORY_FRAMES[state.inspectorFrame] || []).map((line, idx) => (
-                <Text key={idx} color="green">{line}</Text>
+                <Text key={idx} color="magenta">{line}</Text>
               ))}
             </Box>
           )}
@@ -109,7 +111,9 @@ export default function ResponseInspector({ state }: ResponseInspectorProps) {
           </Text>
         )}
         {state.copied && (
-          <Text color="green">✓ Copied response body to clipboard!</Text>
+          <Text color="green">
+            ✓ Copied {state.copied === "body" ? "response body" : "headers"} to clipboard!
+          </Text>
         )}
       </Box>
 
