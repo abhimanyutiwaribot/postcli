@@ -13,10 +13,15 @@ export function usePostCli() {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [baseUrl, setBaseUrl] = useState<string | undefined>(undefined);
   const [consoleLines, setConsoleLines] = useState<string[]>([
-    "❯ PostCLI — interactive developer HTTP client",
-    "Type a request (e.g. GET /posts/1) or type /help for guides.",
-    "",
-    "Esc - Toggle Scroll Mode (j/k to scroll log, c to copy)",
+    "  ██████╗  ██████╗ ███████╗████████╗ ██████╗██╗     ██╗",
+    "  ██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██║     ██║",
+    "  ██████╔╝██║   ██║███████╗   ██║   ██║     ██║     ██║",
+    "  ██╔═══╝ ██║   ██║╚════██║   ██║   ██║     ██║     ██║",
+    "  ██║     ╚██████╔╝███████║   ██║   ╚██████╗███████╗██║",
+    "  ╚═╝      ╚═════╝ ╚══════╝   ╚═╝    ╚═════╝╚══════╝╚═╝",
+    "  ❯ PostCLI — interactive developer HTTP client",
+    "  Type a request (e.g. GET /posts/1) or type /help for guides.",
+    "  Esc - Toggle Scroll Mode (j/k to scroll log, c to copy)",
     ""
   ]);
 
@@ -93,7 +98,7 @@ export function usePostCli() {
     const lower = val.toLowerCase();
     
     // Commands suggestions
-    const cmds = ["/set base http://", "/clear", "/help", "/exit", "/quit", "/copy"];
+    const cmds = ["/set base", "/clear", "/help", "/exit", "/quit", "/copy"];
     for (const cmd of cmds) {
       if (cmd.startsWith(lower)) {
         return cmd.slice(val.length);
