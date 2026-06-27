@@ -12,7 +12,7 @@ export default function DocsPage() {
 
   return (
     <div className="flex items-center justify-center py-12">
-      <span className="text-xs text-zinc-500 animate-pulse"></span>
+      {/* <span className="text-xs text-zinc-500 animate-pulse"></span> */}
     </div>
   );
 }

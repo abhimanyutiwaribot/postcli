@@ -16,7 +16,7 @@ export default function Home() {
             </span>
           </h1>
           <h1 className="hidden md:block text-2xl font-semibold leading-relaxed tracking-wide text-left w-full">
-            An interactive, Terminal-based <br /> HTTP-Client <br />
+            An interactive, terminal-based <br /> http-client
             <span className="inline-block bg-magenta text-black font-bold px-4 py-1 mt-0 -ml-4 rounded-[10px_35px_15px_30px_/_20px_10px_30px_15px] rotate-[-2deg] shadow-sm select-none">
               built for you!!
             </span>
