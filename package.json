@@ -1,5 +1,5 @@
 {
-  "name": "postcli-monorepo",
+  "name": "rqs-monorepo",
   "private": true,
   "type": "module",
   "workspaces": [

@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 
 const INSTALL_COMMANDS = {
-  npm: "npm install -g postcli",
-  bun: "bun add -g postcli",
-  yarn: "yarn global add postcli",
-  pnpm: "pnpm add -g postcli",
+  npm: "npm install -g rqs",
+  bun: "bun add -g rqs",
+  yarn: "yarn global add rqs",
+  pnpm: "pnpm add -g rqs",
 };
 
 export default function InstallCard() {

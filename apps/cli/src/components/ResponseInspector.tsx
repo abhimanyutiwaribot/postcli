@@ -2,16 +2,16 @@ import React from "react";
 import { Box, Text } from "ink";
 import { highlightJsonLine } from "../utils/response.js";
 import { VICTORY_FRAMES, FAILURE_FRAMES } from "../utils/animations.js";
-import type { PostCliState } from "../hooks/usePostCli.js";
+import type { RqsState } from "../hooks/useRqsCli.js";
 
 interface ResponseInspectorProps {
-  state: PostCliState;
+  state: RqsState;
 }
 
 export default function ResponseInspector({ state }: ResponseInspectorProps) {
   const { INSPECTOR_HEIGHT } = state;
   const isBodyTab = state.inspectorTab === "body";
-  
+
   // Parse inspector lines based on active tab
   const inspectorLines = isBodyTab
     ? state.lastResponseBody.split("\n")
@@ -36,8 +36,8 @@ export default function ResponseInspector({ state }: ResponseInspectorProps) {
         <Text bold color="magenta">❯ Response Details</Text>
         <Text dimColor>—</Text>
         <Text color="gray">
-          Status: <Text color={hasFailed ? "red" : "green"} bold>{state.lastResponseStatus}</Text>  •  
-          Time: <Text color="white">{state.lastResponseTime}ms</Text>  •  
+          Status: <Text color={hasFailed ? "red" : "green"} bold>{state.lastResponseStatus}</Text>  •
+          Time: <Text color="white">{state.lastResponseTime}ms</Text>  •
           Size: <Text color="white">{state.lastResponseSize}</Text>
         </Text>
       </Box>
@@ -58,11 +58,11 @@ export default function ResponseInspector({ state }: ResponseInspectorProps) {
           </Box>
 
           {/* Viewport Box */}
-          <Box 
-            flexDirection="column" 
-            height={INSPECTOR_HEIGHT} 
-            overflow="hidden" 
-            paddingX={1} 
+          <Box
+            flexDirection="column"
+            height={INSPECTOR_HEIGHT}
+            overflow="hidden"
+            paddingX={1}
             marginBottom={1}
           >
             {paddedInspectorLines.map((line, i) => (
@@ -80,10 +80,10 @@ export default function ResponseInspector({ state }: ResponseInspectorProps) {
         </Box>
 
         {/* Right Column: Mascot Companion Sidebar */}
-        <Box 
-          flexDirection="column" 
-          width={22} 
-          paddingLeft={2} 
+        <Box
+          flexDirection="column"
+          width={22}
+          paddingLeft={2}
           flexShrink={0}
           justifyContent="center"
         >
@@ -120,9 +120,9 @@ export default function ResponseInspector({ state }: ResponseInspectorProps) {
       {/* Bottom Help Bar */}
       <Box paddingX={1} marginTop={1}>
         <Text dimColor>
-          <Text color="magenta">Tab</Text> toggle tabs  •  
-          <Text color="magenta">j/k (↑/↓)</Text> scroll  •  
-          <Text color="green">c</Text> copy body  •  
+          <Text color="magenta">Tab</Text> toggle tabs  •
+          <Text color="magenta">j/k (↑/↓)</Text> scroll  •
+          <Text color="green">c</Text> copy body  •
           <Text color="red">Esc / q</Text> close inspector
         </Text>
       </Box>

@@ -6,19 +6,19 @@ import { prettyBody, byteSize } from "../utils/response.js";
 import { SPINNER_FRAMES } from "../utils/animations.js";
 import { makeField, type TextField } from "../utils/textField.js";
 
-export function usePostCli() {
+export function useRqs() {
   // --- REPL State ---
   const [inputValue, setInputValue] = useState<TextField>(makeField(""));
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [baseUrl, setBaseUrl] = useState<string | undefined>(undefined);
   const [consoleLines, setConsoleLines] = useState<string[]>([
-    "██████╗  ██████╗ ███████╗████████╗ ██████╗██╗     ██╗",
-    "██╔══██╗██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██║     ██║",
-    "██████╔╝██║   ██║███████╗   ██║   ██║     ██║     ██║",
-    "██╔═══╝ ██║   ██║╚════██║   ██║   ██║     ██║     ██║",
-    "██║     ╚██████╔╝███████║   ██║   ╚██████╗███████╗██║",
-    "╚═╝      ╚═════╝ ╚══════╝   ╚═╝    ╚═════╝╚══════╝╚═╝",
+    "██████╗   ██████╗  ███████╗",
+    "██╔══██╗ ██╔════██╗ ██╔════╝",
+    "██████╔╝ ██║    ██║ ███████╗",
+    "██╔══██╗ ██║▄▄ ██║ ╚════██║",
+    "██║  ██║ ╚██████╔╝ ███████║",
+    "╚═╝  ╚═╝  ╚══▀▀═╝  ╚══════╝",
     "",
     "Type a request (e.g. GET /posts/1) or type /help for guides.",
     ""
@@ -125,7 +125,7 @@ export function usePostCli() {
     // Save to history
     setHistory((h) => [...h, trimmed]);
     setHistoryIndex(-1);
-    setConsoleLines((prev) => [...prev, `postcli ❯ ${commandStr}`]);
+    setConsoleLines((prev) => [...prev, `rqs ❯ ${commandStr}`]);
     setInputValue(makeField(""));
 
     const parsed = parseReplCommand(commandStr, baseUrl);
@@ -153,12 +153,28 @@ export function usePostCli() {
       } else if (cmd === "help") {
         setConsoleLines((prev) => [
           ...prev,
-          "  Controls: [Esc] Edit/Scroll mode | [Tab] Autocomplete | [v] View response | [c] Copy body",
-          "  Commands: /set base <url> | /clear | /copy | /help | /exit",
-          "  HTTPie Syntax examples:",
-          "    GET /posts limit=10                  (Query param)",
-          "    POST /posts title=\"hello\" active:=true (JSON payload)",
-          "    GET /users Authorization:Bearer      (Request Header)",
+          "  Usage:",
+          "    <method> <path> [params...]",
+          "",
+          "  System Commands:",
+          "    /set base <url>      Set the default base URL for relative paths",
+          "    /copy                Copy the last response JSON to clipboard",
+          "    /clear               Clear all console screen logs",
+          "    /help                Show this help guide",
+          "    /exit, /quit         Quit the REPL session",
+          "",
+          "  HTTPie-style Request Syntax:",
+          "    headers              Key:Value (e.g., Content-Type:application/json)",
+          "    query params         key==value (e.g., limit==5 page==2)",
+          "    body fields          key=value (e.g., title=\"Hello World\" active=true)",
+          "    typed json           key:=value (e.g., published:=true views:=150)",
+          "    nested fields        user[name]=\"John\" user[address][zip]:=98101",
+          "",
+          "  Interactive Hotkeys:",
+          "    Esc                  Switch between Input and Scroll mode",
+          "    Tab                  Autocomplete suggested methods or commands",
+          "    v                    Open/close response body & headers inspector",
+          "    c                    Copy active inspector tab payload to clipboard",
           ""
         ]);
       } else if (cmd === "set") {
@@ -309,4 +325,4 @@ export function usePostCli() {
     inspectorFrame
   };
 }
-export type PostCliState = ReturnType<typeof usePostCli>;
+export type RqsState = ReturnType<typeof useRqs>;

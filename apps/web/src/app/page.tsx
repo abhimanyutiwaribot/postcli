@@ -6,7 +6,7 @@ import ComparisonTable from "../components/landing/ComparisonTable";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "PostCLI — Interactive Terminal HTTP Client",
+  title: "RQS — Interactive Terminal HTTP Client",
   description: "An interactive, terminal-based HTTP client built for developers. Write requests using clean parameters, navigate outputs with Vim keys, and configure API calls in a REPL console.",
 };
 

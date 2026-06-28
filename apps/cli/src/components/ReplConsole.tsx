@@ -2,10 +2,10 @@ import React from "react";
 import { Box, Text } from "ink";
 import { highlightJsonLine } from "../utils/response.js";
 import { SPINNER_FRAMES } from "../utils/animations.js";
-import type { PostCliState } from "../hooks/usePostCli.js";
+import type { RqsState } from "../hooks/useRqsCli.js";
 
 interface ReplConsoleProps {
-  state: PostCliState;
+  state: RqsState;
 }
 
 export default function ReplConsole({ state }: ReplConsoleProps) {
@@ -18,7 +18,7 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
     <Box flexDirection="column" padding={1}>
       {/* Header */}
       <Box paddingX={1} gap={1} marginBottom={0}>
-        <Text bold color="magenta">❯ PostCLI REPL</Text>
+        <Text bold color="magenta">❯ RQS REPL</Text>
         <Text dimColor>—</Text>
         <Text color="gray">interactive HTTP shell console</Text>
       </Box>
@@ -36,11 +36,11 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
       </Box>
 
       {/* Output Console Log */}
-      <Box 
-        flexDirection="column" 
-        height={state.VIEWPORT_HEIGHT} 
-        overflow="hidden" 
-        paddingX={1} 
+      <Box
+        flexDirection="column"
+        height={state.VIEWPORT_HEIGHT}
+        overflow="hidden"
+        paddingX={1}
         marginBottom={1}
       >
         {visibleLines.map((line, i) => (
@@ -51,13 +51,13 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
             ) : /^\s*([{\}[\]"]|true|false|null|-?\d)/.test(line) ? (
               highlightJsonLine(line)
             ) : (
-              <Text 
+              <Text
                 color={
                   line.startsWith("  █") || line.startsWith("  ╚") ? "magenta" :
-                  line.startsWith("postcli ❯") ? "magenta" : 
-                  line.startsWith("❯") ? "yellow" : 
-                  "white"
-                } 
+                    line.startsWith("rqs ❯") ? "magenta" :
+                      line.startsWith("❯") ? "yellow" :
+                        "white"
+                }
                 bold={line.startsWith("  █") || line.startsWith("  ╚")}
               >
                 {line}
@@ -76,15 +76,15 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
       )}
 
       {/* Prompt Input bar */}
-      <Box 
-        borderStyle="round" 
-        borderColor="magenta" 
-        paddingX={1} 
+      <Box
+        borderStyle="round"
+        borderColor="magenta"
+        paddingX={1}
         marginTop={0}
       >
         {state.panel === "input" ? (
           <Box>
-            <Text color="magenta" bold>postcli ❯ </Text>
+            <Text color="magenta" bold>rqs ❯ </Text>
             {(() => {
               const { value, cursor } = state.inputValue;
               const before = value.slice(0, cursor);
@@ -106,10 +106,10 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
           <Box gap={2}>
             <Text color="yellow" bold>SCROLL MODE ❯ </Text>
             <Text color="gray">
-              <Text color="magenta">j/k (↑/↓)</Text> scroll log  •  
-              <Text color="magenta">v</Text> inspect response  •  
-              <Text color="green">c</Text> copy body  •  
-              <Text color="yellow">Esc / i</Text> edit  •  
+              <Text color="magenta">j/k (↑/↓)</Text> scroll log  •
+              <Text color="magenta">v</Text> inspect response  •
+              <Text color="green">c</Text> copy body  •
+              <Text color="yellow">Esc / i</Text> edit  •
               <Text color="red">q</Text> quit
             </Text>
           </Box>

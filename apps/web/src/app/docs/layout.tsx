@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import DocsLayoutClient from "../../components/DocsLayoutClient";
 
 export const metadata: Metadata = {
-  title: "Documentation — PostCLI",
-  description: "Learn how to use PostCLI: interactive REPL commands, keyboard bindings, syntax mappings, and system slash commands.",
+  metadataBase: new URL("https://rqscli.vercel.app"),
+  title: "Documentation — RQS",
+  description: "Learn how to use RQS: interactive REPL commands, keyboard bindings, syntax mappings, and system slash commands.",
   openGraph: {
-    title: "Documentation — PostCLI",
-    description: "Learn how to use PostCLI: interactive REPL commands, keyboard bindings, syntax mappings, and system slash commands.",
+    title: "Documentation — RQS",
+    description: "Learn how to use RQS: interactive REPL commands, keyboard bindings, syntax mappings, and system slash commands.",
     images: [
       {
         url: "/opengraph-image-docs.png",
         width: 1200,
         height: 630,
-        alt: "PostCLI Documentation",
+        alt: "RQS Documentation",
       },
     ],
   },

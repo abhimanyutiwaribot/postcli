@@ -1,10 +1,10 @@
 import { useInput } from "ink";
 import { useRef } from "react";
 import { makeField, tfDelete, tfInsert, tfLeft, tfRight } from "../utils/textField.js";
-import type { usePostCli } from "./usePostCli.js";
+import type { useRqs } from "./useRqsCli.js";
 
 interface KeyboardNavigationProps {
-  state: ReturnType<typeof usePostCli>;
+  state: ReturnType<typeof useRqs>;
 }
 
 export function useKeyboardNavigation({ state: propState }: KeyboardNavigationProps) {
@@ -13,13 +13,13 @@ export function useKeyboardNavigation({ state: propState }: KeyboardNavigationPr
 
   useInput((input, key) => {
     const state = stateRef.current;
-    const { 
-      panel, 
-      inputValue, 
-      suggestion, 
-      history, 
-      historyIndex, 
-      totalLines, 
+    const {
+      panel,
+      inputValue,
+      suggestion,
+      history,
+      historyIndex,
+      totalLines,
       VIEWPORT_HEIGHT,
       viewingResponse,
       inspectorTab,
@@ -139,7 +139,7 @@ export function useKeyboardNavigation({ state: propState }: KeyboardNavigationPr
       // Command History Navigation (Up / Down)
       if (key.upArrow) {
         if (history.length === 0) return;
-        
+
         let nextIndex = historyIndex;
         if (historyIndex === -1) {
           nextIndex = history.length - 1;
@@ -153,7 +153,7 @@ export function useKeyboardNavigation({ state: propState }: KeyboardNavigationPr
 
       if (key.downArrow) {
         if (historyIndex === -1) return;
-        
+
         if (historyIndex === history.length - 1) {
           state.setHistoryIndex(-1);
           state.setInputValue(makeField(""));

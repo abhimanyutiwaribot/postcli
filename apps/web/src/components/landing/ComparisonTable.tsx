@@ -6,35 +6,35 @@ export default function ComparisonTable() {
       feature: "Interface Type",
       curl: "Static CLI",
       postman: "Desktop GUI",
-      postcli: "CLI REPL (Interactive)",
+      rqs: "CLI REPL (Interactive)",
       highlight: true
     },
     {
       feature: "Writing JSON Payloads",
       curl: "Escape hell ('{\"a\":1}')",
       postman: "Form fields or editor",
-      postcli: "Intuitive syntax (key=val)",
+      rqs: "Intuitive syntax (key=val)",
       highlight: true
     },
     {
       feature: "Keyboard Focus",
       curl: "Command-history only",
       postman: "Mouse-heavy clicks",
-      postcli: "Vim keys (j/k/v/Esc)",
+      rqs: "Vim keys (j/k/v/Esc)",
       highlight: true
     },
     {
       feature: "Startup Time",
       curl: "Instant",
       postman: "Slow (splash screen)",
-      postcli: "Instant (<50ms)",
+      rqs: "Instant (<50ms)",
       highlight: true
     },
     {
       feature: "Memory Footprint",
       curl: "<5 MB",
       postman: "300 MB+",
-      postcli: "<20 MB",
+      rqs: "<20 MB",
       highlight: true
     }
   ];
@@ -43,10 +43,10 @@ export default function ComparisonTable() {
     <section className="w-full flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-xl md:text-2xl font-bold tracking-wide">
-          How postcli compares?
+          How rqs compares?
         </h2>
         <p className="text-sm md:text-md text-zinc-700 dark:text-zinc-400">
-          How does postcli cooks👨🏻‍🍳 against these frauds --&gt; curl and bloated web clients?
+          How does rqs cooks👨🏻‍🍳 against these frauds --&gt; curl and bloated web clients?
         </p>
       </div>
 
@@ -61,7 +61,7 @@ export default function ComparisonTable() {
                   Feature
                 </th>
                 <th className="p-4 font-bold text-magenta uppercase tracking-wider min-w-[160px] bg-magenta/5">
-                  postcli
+                  rqs
                 </th>
                 <th className="p-4 font-bold text-zinc-500 uppercase tracking-wider min-w-[120px]">
                   curl
@@ -81,7 +81,7 @@ export default function ComparisonTable() {
                     {row.feature}
                   </td>
                   <td className="p-4 font-bold text-magenta bg-magenta/5 border-l border-r border-magenta/10">
-                    {row.postcli}
+                    {row.rqs}
                   </td>
                   <td className="p-4 text-zinc-650 dark:text-zinc-400">
                     {row.curl}

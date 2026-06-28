@@ -1,11 +1,15 @@
 {
-  "name": "postcli",
+  "name": "rqs",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.tsx",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsx src/index.tsx",
     "build": "tsc",
+    "prepack": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +17,7 @@
   "license": "ISC",
   "type": "module",
   "bin": {
-    "postcli": "./dist/index.js"
+    "rqs": "./dist/index.js"
   },
   "dependencies": {
     "clipboardy": "^5.3.1",

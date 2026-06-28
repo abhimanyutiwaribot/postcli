@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "REPL Modes & Key Bindings — PostCLI Docs",
-  description: "Guide to PostCLI input and scroll modes, vim key navigation, response details inspector, and clipboard copy shortcuts.",
+  title: "REPL Modes & Key Bindings — RQS Docs",
+  description: "Guide to RQS input and scroll modes, vim key navigation, response details inspector, and clipboard copy shortcuts.",
 };
 
 export default function ReplModes() {
@@ -12,7 +12,7 @@ export default function ReplModes() {
         repl modes
       </h1>
       <p className="text-base md:text-lg text-zinc-850 dark:text-zinc-300">
-        postcli runs in two main modes: input mode (to type requests) and scroll mode (to inspect outcomes).
+        rqs runs in two main modes: input mode (to type requests) and scroll mode (to inspect outcomes).
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">

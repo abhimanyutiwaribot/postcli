@@ -24,7 +24,7 @@ export default function Header() {
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
           <span className="font-bold text-base md:text-lg">
-            postcli <span className="text-magenta font-black">❯</span>
+            rqs <span className="text-magenta font-black">❯</span>
           </span>
         </Link>
       </div>
@@ -36,7 +36,7 @@ export default function Header() {
           Docs
         </Link>
         <a
-          href="https://github.com/abhimanyutiwaribot/postcli"
+          href="https://github.com/abhimanyutiwaribot/rqs"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs md:text-sm hover:underline transition-colors text-zinc-700 hover:text-black dark:text-zinc-300 dark:hover:text-white"
