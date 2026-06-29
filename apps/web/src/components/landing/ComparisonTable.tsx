@@ -33,8 +33,15 @@ export default function ComparisonTable() {
     {
       feature: "Memory Footprint",
       curl: "<5 MB",
-      postman: "300 MB+",
-      rqsh: "<20 MB",
+      postman: "500 MB+",
+      rqsh: "<30 MB",
+      highlight: true
+    },
+    {
+      feature: "Install Size",
+      curl: "Native (~5 MB)",
+      postman: "400 MB+",
+      rqsh: "~2 MB",
       highlight: true
     }
   ];

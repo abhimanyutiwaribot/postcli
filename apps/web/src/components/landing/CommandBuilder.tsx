@@ -136,7 +136,7 @@ export default function CommandBuilder() {
       {/* Headings */}
       <div className="flex flex-col gap-2">
         <h2 className="text-xl md:text-2xl font-bold tracking-wide">
-          Interactive Command Builder
+          Build your rqsh request
         </h2>
         <p className="text-xs md:text-sm text-zinc-650 dark:text-zinc-400">
           Learn the CLI's intuitive syntax. Play with fields below to instantly generate a command.

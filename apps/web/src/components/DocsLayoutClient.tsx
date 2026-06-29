@@ -36,7 +36,7 @@ export default function DocsLayoutClient({ children }: DocsLayoutClientProps) {
           {/* Desktop Navigation */}
           <div className="hidden md:flex flex-col gap-3">
             <span className="text-[10px] font-bold uppercase tracking-wider text-magenta">
-              Navigation
+              Menu
             </span>
             <div className="flex flex-col gap-3.5">
               {navLinks.map((link) => {
