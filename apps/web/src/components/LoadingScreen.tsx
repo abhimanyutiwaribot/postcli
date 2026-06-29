@@ -16,8 +16,6 @@ export default function LoadingScreen() {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // Lock scrolling during the brand intro logo load
-    document.body.style.overflow = "hidden";
 
     // Start fade out animation after 800ms
     const fadeTimer = setTimeout(() => {
