@@ -23,10 +23,10 @@ export default function GettingStarted() {
           className="p-5 rounded-xl border relative font-mono text-sm overflow-x-auto  border-zinc-500 text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
         >
           <div className="flex flex-col gap-4">
-            <div><span className="text-zinc-500"># npm</span> <br />npm install -g rqsh</div>
-            <div><span className="text-zinc-500"># bun</span> <br />bun add -g rqsh</div>
-            <div><span className="text-zinc-500"># yarn</span> <br />yarn global add rqsh</div>
-            <div><span className="text-zinc-500"># pnpm</span> <br />pnpm add -g rqsh</div>
+            <div><span className="text-zinc-500"># npm</span> <br />npm install -g request-shell</div>
+            <div><span className="text-zinc-500"># bun</span> <br />bun add -g request-shell</div>
+            <div><span className="text-zinc-500"># yarn</span> <br />yarn global add request-shell</div>
+            <div><span className="text-zinc-500"># pnpm</span> <br />pnpm add -g request-shell</div>
           </div>
         </div>
       </div>

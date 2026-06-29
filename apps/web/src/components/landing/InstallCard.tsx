@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 
 const INSTALL_COMMANDS = {
-  npm: "npm install -g rqsh",
-  bun: "bun add -g rqsh",
-  yarn: "yarn global add rqsh",
-  pnpm: "pnpm add -g rqsh",
+  npm: "npm install -g request-shell",
+  bun: "bun add -g request-shell",
+  yarn: "yarn global add request-shell",
+  pnpm: "pnpm add -g request-shell",
 };
 
 export default function InstallCard() {
