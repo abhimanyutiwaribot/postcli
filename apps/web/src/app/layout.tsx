@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "../components/Header";
+import LoadingScreen from "../components/LoadingScreen";
 import { ThemeProvider } from "@/providers/theme-provider";
 import "./globals.css";
 
@@ -15,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rqscli.vercel.app"),
   title: "RQS — Interactive Developer HTTP Client",
   description: "An interactive, terminal-based HTTP client built for developers, featuring automated parameter tokenization and responsive ASCII mascot companions.",
   openGraph: {
@@ -60,6 +62,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <LoadingScreen />
           <div className="w-full max-w-6xl mx-auto px-4 pt-6 md:px-8 md:pt-12 animate-fade-in">
             <Header />
           </div>
